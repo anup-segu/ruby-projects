@@ -1,35 +1,42 @@
 require './board'
+require 'byebug'
 
 class Tile
-  attr_accessor :flagged, :bombed, :revealed
+  attr_accessor :flagged, :bombed, :revealed, :bombs_nearby
   attr_reader :pos
   def initialize(x, y, bombed = false)
     @bombed = bombed
     @flagged = false
     @revealed = false
     @pos = [x, y]
+    @bombs_nearby = 0
   end
 
-  def reveal
-    revealed = true
+  def reveal(board)
+    self.neighbor_bomb_count(board)
+    return self.revealed = true if self.bombs_nearby > 0
+    self.revealed = true
+    self.neighbors(board).each { |tile| tile.reveal(board) if tile.revealed == false }
+  end
+
+  def flag
+    self.flagged = true
   end
 
   def to_s
     #other methods will implicitly convert Tile to strings
     #will output to the following strings for display purposes
     case
-    when bombed && revealed
+    when @bombed && @revealed
       "B"
-    when flagged && !(revealed)
+    when @flagged && !(@revealed)
       "F"
-    when revealed
-      neighbor_bomb_count.to_s
+    when @revealed
+      self.bombs_nearby.to_s
     else
       " "
     end
   end
-
-
 
   def neighbors(board)
     neighbors_arr = pos.surround
@@ -43,7 +50,7 @@ class Tile
     neighbors(board).each do |tile|
       neighbor_bombs += 1 if tile.bombed
     end
-    neighbor_bombs
+    @bombs_nearby = neighbor_bombs
   end
 
 end

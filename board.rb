@@ -2,9 +2,18 @@ require './tile'
 
 class Board
   attr_accessor :grid, :bomb_count
+
   def initialize(grid = Array.new(9) {|x| Array.new(9) {|y| Tile.new(x,y)}})
     @grid = grid
-    @bomb_count = (grid.length..grid.length * 3).to_a.sample
+    @bomb_count = 1 #(grid.length..grid.length * 3).to_a.sample
+  end
+
+  def solved?
+    @grid.flatten.reject { |tile| tile.bombed }.all? { |tile| tile.revealed }
+  end
+
+  def over?
+    @grid.flatten.any? { |tile| tile.bombed && tile.revealed }
   end
 
   def seed_bombs(bomb_count)
