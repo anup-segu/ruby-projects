@@ -1,11 +1,12 @@
 require './tile'
+require 'colorize'
 
 class Board
   attr_accessor :grid, :bomb_count
 
   def initialize(grid = Array.new(9) {|x| Array.new(9) {|y| Tile.new(x,y)}})
     @grid = grid
-    @bomb_count = 1 #(grid.length..grid.length * 3).to_a.sample
+    @bomb_count = grid.length ** 2 / grid.length #(grid.length..grid.length * 3).to_a.sample
   end
 
   def solved?
@@ -42,10 +43,14 @@ class Board
   end
 
   def render
-    puts "  " + (0...grid.length).to_a.join(" ")
+    puts "   " + (0...grid.length).to_a.join("  ")
     grid.each_with_index do |row, i|
-      puts "#{i} #{row.join(" ")}"
+      puts "#{i} [#{row.join("][")}]"
     end
+  end
+
+  def reveal_all
+    grid.flatten.each { |tile| tile.reveal(self) }
   end
 
 
