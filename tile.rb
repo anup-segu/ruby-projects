@@ -20,7 +20,7 @@ class Tile
   end
 
   def flag
-    self.flagged = true
+    self.flagged == true ? self.flagged = false : self.flagged = true
   end
 
   def to_s
@@ -28,11 +28,11 @@ class Tile
     #will output to the following strings for display purposes
     case
     when @bombed && @revealed
-      "B"
+      "B".red
     when @flagged && !(@revealed)
-      "F"
+      "F".yellow
     when @revealed
-      self.bombs_nearby.to_s
+      self.bombs_nearby.to_s.cyan
     else
       " "
     end

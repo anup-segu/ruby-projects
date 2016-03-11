@@ -1,6 +1,7 @@
 require_relative 'board'
 require_relative 'tile'
 require 'byebug'
+require 'colorize'
 
 class MineSweeper
   attr_reader :board
@@ -31,32 +32,28 @@ class MineSweeper
   def run
     board.seed_bombs(board.bomb_count)
     play_turn until solved? || over?
+    board.reveal_all if over?
     board.render
-    puts "Nice bruh" if solved?
-    puts "BOOM! YOU'RE DEAD!" if over?
+    puts "Nice bruh".cyan if solved? && !over?
+    puts "BOOM! YOU'RE DEAD!".red if over?
   end
 
   def get_pos
     pos = nil
-    until pos && valid_pos?(pos)
-      puts "Please enter a position on the board (e.g., '3,4')"
+    puts "Please enter a position on the board (e.g., '3,4')"
+    print "> "
+    pos = gets.chomp.split(",").map(&:to_i).reverse
+    until pos.length == 2 && valid_pos?(pos)
+      puts "Invalid position entered (did you use a comma?)"
       print "> "
-
-      begin
-        pos = gets.chomp.split(",").map(&:to_i)
-      rescue
-        puts "Invalid position entered (did you use a comma?)"
-        puts ""
-
-        pos = nil
-      end
+      pos = gets.chomp.split(",").map(&:to_i).reverse
     end
     pos
   end
 
   def valid_pos?(pos)
     (pos[0]>=0 && pos[0] < board.grid[0].length) &&
-      (pos[1]>= 0 && pos[1] < board.grid.length)
+      (pos[1]>= 0 && pos[1] < (board.grid.length))
   end
 
   def get_action
