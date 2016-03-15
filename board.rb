@@ -57,12 +57,11 @@ class Board
 
   def move(start_pos, end_pos)
     starting_piece = self[start_pos]
-    raise ArgumentError.new("Starting position is empty") if starting_piece.nil?
     ending_piece = self[end_pos]
-    raise ArgumentError.new("Starting position is empty") if !ending_piece.nil? && ending_piece.color == starting_piece.color
 
     self[end_pos] = starting_piece
-    self[start_pos] = nil
+    starting_piece.position = end_pos
+    self[start_pos] = NullPiece.new(self, start_pos)
   end
 
   def [](pos)
@@ -77,6 +76,10 @@ class Board
 
   def has_piece?(pos)
     !(self[pos].is_a?(NullPiece))
+  end
+
+  def checkmate?
+    false
   end
 
 end

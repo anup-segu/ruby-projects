@@ -5,11 +5,13 @@ require_relative 'cursorable'
 class Display
   include Cursorable
   attr_reader :board, :game
+  attr_accessor :cursor_pos, :message
 
   def initialize(board, game = nil)
     @board = board
     @game = game
     @cursor_pos = [0, 0]
+    @message = "Select a piece, then select a destination."
   end
 
   def build_grid
@@ -36,10 +38,13 @@ class Display
     { background: bg, color: :black }
   end
 
+
   def render
     system("clear")
-    puts "Fill the grid!"
     puts "Arrow keys, WASD, or vim to move, space or enter to confirm."
+    puts
+    puts message
+    puts
     build_grid.each { |row| puts row.join }
   end
 end
