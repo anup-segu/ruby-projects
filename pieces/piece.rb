@@ -4,10 +4,14 @@ class Piece
     @board = board
     @position = position
     @color = color
+    @board[position] = self
   end
 
-  def moves
-
+  def move(new_pos)
+    @board[self.position] = NullPiece.new(self.position)
+    @board[new_pos] = self
   end
+
+
 
 end
