@@ -1,3 +1,3 @@
-class Nullpiece
+class NullPiece
 
 end

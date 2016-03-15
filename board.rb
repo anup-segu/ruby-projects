@@ -36,4 +36,8 @@ class Board
     @grid[x][y] = target
   end
 
+  def has_piece?(pos)
+    !(self[pos].is_a?(NullPiece))
+  end
+
 end
