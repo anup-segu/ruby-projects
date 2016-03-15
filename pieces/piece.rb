@@ -1,5 +1,6 @@
 class Piece
-
+  attr_accessor :board
+  
   def initialize(board, position, color)
     @board = board
     @position = position

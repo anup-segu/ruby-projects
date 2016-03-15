@@ -10,4 +10,8 @@ class NullPiece
   def to_s
     "  "
   end
+
+  def color
+    nil
+  end
 end

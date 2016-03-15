@@ -33,11 +33,11 @@ module Steppable
   def moves_on_board
     moves = []
 
-    move_dir.each do |dir_x, dir_y|
-      x, y = self.position
+    move_dir.each do |dir_row, dir_col|
+      row, col = self.position
 
-      x, y = x + dir_x, y + dir_y
-      new_pos = [x, y]
+      row, col = row + dir_row, col + dir_col
+      new_pos = [row, col]
 
       next unless @board.in_bounds?(new_pos)
 
