@@ -24,7 +24,9 @@ class Board
     @grid.each_with_index do |row, row_idx|
       row.each_with_index do |space, space_idx|
         if row_idx == 1 || row_idx == 6
-          #PAWNS
+          color = row_idx % 2 == 0 ? :white : :black
+          space = Pawn.new(self, [row_idx, space_idx], color)
+          # space = NullPiece.new(self, [row_idx, space_idx])
         elsif row_idx == 0 || row_idx == 7
           color = row_idx == 0 ? :black : :white
           case space_idx
@@ -74,7 +76,7 @@ class Board
   end
 
   def has_piece?(pos)
-    !(self[pos].nil?)
+    !(self[pos].is_a?(NullPiece))
   end
 
 end
