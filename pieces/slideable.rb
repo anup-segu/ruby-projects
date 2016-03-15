@@ -1,56 +1,51 @@
 module Slideable
-  #We wrote (-7..7) so that the argument to zip would fully map
-  VERTICAL_MOVES = (-7..7).zip(-7..7).map { |x,y| [0, y]}.reject { |_,y| y == 0 }
 
-  HORIZONTAL_MOVES = (-7..7).zip(0..0).map { |x,y| [x, 0]}.reject { |x,_| x == 0 }
+  ORTHAGONAL_DIR = [
+    [-1,0],
+    [1,0],
+    [0,-1],
+    [0,1]
+  ]
 
-  DIAGONAL_MOVES = (1..7).zip(1..7) +
-    (1..7).zip((-7..-1).to_a.reverse) +
-    (-7..-1).zip((1..7).to_a.reverse) +
-    (-7..-1).zip(-7..-1)
+  DIAGONAL_DIR = [
+    [-1,1],
+    [-1,-1],
+    [1,1],
+    [1,-1]
+  ]
 
+  def orthagonal_dir
+    ORTHAGONAL_DIR
+  end
 
-  def valid_moves(pos)
-    valid_moves = []
+  def diagonal_dir
+    DIAGONAL_DIR
+  end
 
-    mapped_moves(pos).each do |position|
-      valid_moves << position if @board.in_bounds?(position)
+  def moves_on_board
+    moves = []
+
+    move_dir.each do |dir_x, dir_y|
+      x, y = self.position
+
+      loop do
+        x, y = x + dir_x, y + dir_y
+        new_pos = [x, y]
+
+        break unless @board.in_bounds?(new_pos)
+
+        if @board.has_piece?(new_pos) && @board[new_pos].color == color
+          break
+        elsif @board.has_piece?(new_pos)
+          moves << new_pos
+          break
+        else
+          moves << new_pos
+        end
+      end
     end
 
-    valid_moves
+    moves
   end
-
-  def mapped_moves(pos)
-    x,y = pos
-    available_moves.map {|row, col| [row + x, col + y]}
-  end
-
-  # def open_moves(moves)
-  #   (1..7).each do |shift|
-  #     next_position = [@position[0]+shift, @position[1]]
-  #     next if @board[next_position].is_a?(NullPiece)
-  #     if @board.has_piece?(next_position)
-  #       if @board[next_position].color == self.color
-  #         right = moves.select {|x,y| if x < shift}
-  #       end
-  #     else
-  #       right = moves.select {|x,y| if x <= shift}
-  #     end
-  #   end
-  #
-  #   (1..7).each do |shift|
-  #     next_position = [@position[0]-shift, @position[1]]
-  #     next if @board[next_position].is_a?(NullPiece)
-  #     if @board.has_piece?(next_position)
-  #       if @board[next_position].color == self.color
-  #         left = moves.select {|x,y| if x > shift}
-  #       end
-  #     else
-  #       left = moves.select {|x,y| if x >= shift}
-  #     end
-  #   end
-  #
-  #   right + left
-  # end
 
 end
