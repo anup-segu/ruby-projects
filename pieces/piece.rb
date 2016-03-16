@@ -1,5 +1,6 @@
 class Piece
   attr_accessor :board, :position
+  attr_reader :color
 
   def initialize(board, position, color)
     @board = board
@@ -8,8 +9,4 @@ class Piece
     @board[position] = self
   end
 
-  # def move(new_pos)
-  #   @board[self.position] = NullPiece.new(self.position)
-  #   @board[new_pos] = self
-  # end
 end

@@ -22,11 +22,26 @@ class Pawn < Piece
 
     case self.color
     when :black
-      moves << [1, -1] if @board[[self.position[0] + 1, self.position[1] - 1]].color == :white
-      moves << [1, 1] if @board[[self.position[0] + 1, self.position[1] + 1]].color == :white
+      left = [self.position[0] + 1, self.position[1] - 1]
+      right = [self.position[0] + 1, self.position[1] + 1]
+      if @board.in_bounds?(left)
+        moves << [1, -1] if @board[left].color == :white
+      end
+
+      if @board.in_bounds?(right)
+        moves << [1, 1] if @board[right].color == :white
+      end
+
     when :white
-      moves << [-1, -1] if @board[[self.position[0] - 1, self.position[1] - 1]].color == :black
-      moves << [-1, 1] if @board[[self.position[0] - 1, self.position[1] + 1]].color == :black
+      left = [self.position[0] - 1, self.position[1] - 1]
+      right = [self.position[0] - 1, self.position[1] + 1]
+      if @board.in_bounds?(left)
+          moves << [-1, -1] if @board[left].color == :black
+      end
+
+      if @board.in_bounds?(right)
+        moves << [-1, 1] if @board[right].color == :black
+      end
     end
 
     moves
