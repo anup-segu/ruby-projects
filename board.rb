@@ -98,8 +98,37 @@ class Board
     false
   end
 
-  def checkmate?
-    false
+  def checkmate?(color)
+    return false unless in_check?(color)
+    our_pieces = select_pieces(color)
+    our_pieces.all? { |piece| piece.valid_moves.empty? }
   end
+
+  def dup
+    new_board = Board.new(false)
+    @grid.flatten.each do |space|
+      if space.is_a?(NullPiece)
+        NullPiece.new(new_board, space.position)
+      else
+        space.class.new(new_board, space.position, space.color)
+      end
+    end
+
+    new_board
+  end
+
+  def move!(start_pos, end_pos)
+    new_board = dup
+
+    starting_piece = new_board[start_pos]
+    ending_piece = new_board[end_pos]
+
+    new_board[end_pos] = starting_piece
+    starting_piece.position = end_pos
+    new_board[start_pos] = NullPiece.new(new_board, start_pos)
+
+    new_board
+  end
+
 
 end

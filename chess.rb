@@ -11,7 +11,7 @@ class Chess
   end
 
   def run
-    until @board.checkmate?
+    until @board.checkmate?(:black) || @board.checkmate?(:white)
       begin
         @current_player.get_turn
       rescue ChessMoveError => e
