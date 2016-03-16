@@ -1,4 +1,5 @@
 require_relative 'pieces'
+require 'byebug'
 
 class Board
   attr_accessor :grid
@@ -76,6 +77,25 @@ class Board
 
   def has_piece?(pos)
     !(self[pos].is_a?(NullPiece))
+  end
+
+  def find_king(color)
+    @grid.flatten.each do |space|
+      return space.position if space.is_a?(King) && space.color == color
+    end
+  end
+
+  def select_pieces(color)
+    @grid.flatten.select {|space| space.is_a?(Piece) && space.color == color}
+  end
+
+  def in_check?(color)
+    other_color = color == :white ? :black : :white
+    king_pos = find_king(color)
+    select_pieces(other_color).each do |piece|
+      return true if piece.moves_on_board.include?(king_pos)
+    end
+    false
   end
 
   def checkmate?
